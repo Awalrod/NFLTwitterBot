@@ -56,12 +56,12 @@ for tweet in tweepy.Cursor(api.search, s, since_id=lastID, include_entities=True
         print("Contains video: "+ str(isVid))
         
         if isVid :
-            subprocess.call(["./dl_and_alter.sh", exURL])
-            upload_result = api.upload_chunked('out.mp4')
+            subprocess.call(["./src/dl_and_alter.sh", exURL])
+            upload_result = api.upload_chunked('untracked/artifacts/out.mp4')
             subprocess.call(["sleep","5"])
             #The api needs to upload the video before the status can be posted
             api.update_status(status="@"+username+" @"+topName+" Are u ready for some football?",in_reply_to_status_id=tweetID, media_ids=[upload_result.media_id_string])
-            subprocess.call(["./clean.sh"])
+            subprocess.call(["./src/clean.sh"])
             f = open("examplejson","w")
             f.write(stweet)
             f.close()
