@@ -1,0 +1,1 @@
+python3 src/bot.py >> persist/bot.log 2>&1
