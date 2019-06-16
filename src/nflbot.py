@@ -1,5 +1,5 @@
 #!/usr/bin/python3.5
-
+import sys
 import tweepy
 import json
 import subprocess
@@ -18,8 +18,9 @@ PYLIBLOC="/usr/local/lib/python3.5/dist-packages"
 DAEMONLOC="/etc/init.d"
 
 
+print("Iinitial start: "+str(datetime.datetime.now()))
 
-while(true):
+while(True):
     print("#### " + str(datetime.datetime.now()) +" ####")
 
     #files
@@ -82,3 +83,5 @@ while(true):
 
     fID = open(PERSISTLOC+"/lastID","w")
     fID.write(str(lastID))
+    fID.close()
+    time.sleep(300) # 5 minutes    

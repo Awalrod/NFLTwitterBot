@@ -15,20 +15,25 @@ PYTHONPATH=/usr/local/lib/python3.5/dist-packages
 case "$1" in
 
 start)
-	python3 $PATH/nflbot.py >> /var/log/nflbot.log 2>&1 &
+	sudo python3 /usr/local/bin/nflbot.py >> /var/log/nflbot.log 2>&1 &
+	echo "Starting daemon">> /var/log/nflbot.log
 	;;
 stop)
-	pkill nflbot.py
+
+	sudo pkill nflbot.py
+	echo "Stopping daemon">> /var/log/nflbot.log	
 	;;
 status)
 	echo "Status unsupported"
 	;;
 restart)
-	pkill nflbot.py
-	python3 $PATH/nflbot.py>>/var/log/nflbot.log 2>&1 &
+	sudo pkill nflbot.py
+	sudo python3 /usr/local/bin/nflbot.py >> /var/log/nflbot.log 2>&1 &
+	echo "Restarting daemon">> /var/log/nflbot.log
 	;;
 *)
 	echo "start|stop|restart"
-
-
+	;;
+esac 
+exit 0
 #python3 src/bot.py >> persist/bot.log 2>&1

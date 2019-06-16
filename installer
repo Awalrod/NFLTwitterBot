@@ -10,7 +10,7 @@ DAEMONLOC=/etc/init.d
 
 
 cp ./src/nflbot.py $BINLOC/
-cp ./src/nflclean.py $BINLOC/
+cp ./src/nflclean.sh $BINLOC/
 cp ./src/dl_and_alter.sh $BINLOC/
 
 mkdir -p $TEMPLOC
@@ -27,3 +27,6 @@ touch $LOGLOC/nflbot.log
 cp -r ./src/tweepy $PYLIBLOC/
 
 cp ./nfldaemon $DAEMONLOC/
+chmod 755 $DAEMONLOC/nfldaemon
+chown root:root $DAEMONLOC/nfldaemon
+update-rc.d nfldaemon defaults
