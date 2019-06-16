@@ -1,0 +1,27 @@
+#!/bin/sh
+
+BINLOC=/usr/local/bin
+DATALOC=/usr/local/share/NFL
+TEMPLOC=/usr/local/share/NFL/tmp
+LOGLOC=/var/log
+PERSISTLOC=/etc/nflbot
+PYLIBLOC=/usr/local/lib/python3.5/dist-packages
+DAEMONLOC=/etc/init.d
+
+
+cp ./src/nflbot.py $BINLOC
+cp ./src/nflclean.py $BINLOC
+cp ./src/dl_and_alter.sh $BINLOC
+
+mkdir -p $TEMPLOC
+cp ./src/NFL.mp3 $DATALOC
+mkdir $TEMPLOC
+
+touch $LOGLOC/nflbot.log
+
+mkdir -p $PERSISTLOC
+touch $PERSISTLOC/lastID
+
+cp -r ./src/tweepy $PYLIBLOC/
+
+cp ./nfldaemon $DAEMONLOC/
