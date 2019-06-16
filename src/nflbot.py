@@ -54,24 +54,28 @@ while(True):
     s = searchQuery + sfilter
 
     for tweet in tweepy.Cursor(api.search, s, since_id=lastID, include_entities=True, tweet_mode='extended').items():
+        
         tweetID = tweet.id
         if( tweetID > lastID): lastID = tweetID
         
         username = tweet.user.screen_name
 
         inReply = tweet.in_reply_to_status_id
+        service_print("Processing tweet " +tweetID+" by "+username)
         if( inReply):
-            service_print("reply")
+            service_print("Tweet is a reply")
             inReplyTweet = api.get_status(inReply)
             topName = inReplyTweet.user.screen_name
             stweet = json.dumps(inReplyTweet._json, indent = 4)
             jtweet = json.loads(json.dumps(inReplyTweet._json))
+            exURL= "NULL"
             try:
                 exURL = jtweet["extended_entities"]["media"][0]["expanded_url"]
             except:
                 exURL = "NULL"
             
             isVid = "video" in exURL
+            
             service_print("Contains video: "+ str(isVid))
             
             if isVid :
@@ -79,8 +83,13 @@ while(True):
                 upload_result = api.upload_chunked(TEMPLOC+"/out.mp4")
                 subprocess.call(["sleep","10"])
                 #The api needs to upload the video before the status can be posted
-                api.update_status(status="@"+username+" @"+topName+" Are u ready for some football?",in_reply_to_status_id=tweetID, media_ids=[upload_result.media_id_string])
+                try:
+                    api.update_status(status="@"+username+" @"+topName+" Are u ready for some football?",in_reply_to_status_id=tweetID, media_ids=[upload_result.media_id_string])
+                except:
+                    api.update_status(status="@"+username+" Couldn't upload your video, sorry.",in_reply_to_status_id=tweetID)
                 subprocess.call(["nflclean.sh"])
+            else:
+                api.update_status(status="@"+username+" Couldn't find the video above you",in_reply_to_status_id=tweetID)                
         service_print()
 
     fID = open(PERSISTLOC+"/lastID","w")
