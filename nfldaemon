@@ -11,11 +11,14 @@
 PATH=/usr/local/bin:/usr/bin
 PYTHONPATH=/usr/local/lib/python3.5/dist-packages
 
+PIDFILE="/var/run/nflbot.pid"
+DAEMON="/usr/local/bin/nflbot.py"
+
 
 case "$1" in
 
 start)
-	sudo python3 /usr/local/bin/nflbot.py >> /var/log/nflbot.log 2>&1 &
+	/usr/local/bin/nflbot.py >> /var/log/nflbot.log 2>&1  &
 	echo "Starting daemon">> /var/log/nflbot.log
 	;;
 stop)
@@ -28,7 +31,7 @@ status)
 	;;
 restart)
 	sudo pkill nflbot.py
-	sudo python3 /usr/local/bin/nflbot.py >> /var/log/nflbot.log 2>&1 &
+	/usr/local/bin/nflbot.py >> /var/log/nflbot.log 2>&1 &
 	echo "Restarting daemon">> /var/log/nflbot.log
 	;;
 *)

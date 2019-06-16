@@ -17,11 +17,13 @@ TEMPLOC=PERSISTLOC+"/tmp"
 PYLIBLOC="/usr/local/lib/python3.5/dist-packages"
 DAEMONLOC="/etc/init.d"
 
+def service_print(message):
+    subprocess.call(["/bin/echo",message])
 
-print("Iinitial start: "+str(datetime.datetime.now()))
+service_print("Iinitial start: "+str(datetime.datetime.now()))
 
 while(True):
-    print("#### " + str(datetime.datetime.now()) +" ####")
+    service_print("#### " + str(datetime.datetime.now()) +" ####")
 
     #files
     ck = open(SECLOC+"/consumer_key","r")
@@ -59,7 +61,7 @@ while(True):
 
         inReply = tweet.in_reply_to_status_id
         if( inReply):
-            print("reply")
+            service_print("reply")
             inReplyTweet = api.get_status(inReply)
             topName = inReplyTweet.user.screen_name
             stweet = json.dumps(inReplyTweet._json, indent = 4)
@@ -70,7 +72,7 @@ while(True):
                 exURL = "NULL"
             
             isVid = "video" in exURL
-            print("Contains video: "+ str(isVid))
+            service_print("Contains video: "+ str(isVid))
             
             if isVid :
                 subprocess.call(["dl_and_alter.sh", exURL])
@@ -79,7 +81,7 @@ while(True):
                 #The api needs to upload the video before the status can be posted
                 api.update_status(status="@"+username+" @"+topName+" Are u ready for some football?",in_reply_to_status_id=tweetID, media_ids=[upload_result.media_id_string])
                 subprocess.call(["nflclean.sh"])
-        print()
+        service_print()
 
     fID = open(PERSISTLOC+"/lastID","w")
     fID.write(str(lastID))
