@@ -61,7 +61,7 @@ while(True):
         username = tweet.user.screen_name
 
         inReply = tweet.in_reply_to_status_id
-        service_print("Processing tweet " +tweetID+" by "+username)
+        service_print("Processing tweet " +str(tweetID)+" by "+username)
         if( inReply):
             service_print("Tweet is a reply")
             inReplyTweet = api.get_status(inReply)
@@ -90,7 +90,7 @@ while(True):
                 subprocess.call(["nflclean.sh"])
             else:
                 api.update_status(status="@"+username+" Couldn't find the video above you",in_reply_to_status_id=tweetID)                
-        service_print()
+        service_print(" ")
 
     fID = open(PERSISTLOC+"/lastID","w")
     fID.write(str(lastID))
