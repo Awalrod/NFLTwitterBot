@@ -64,7 +64,12 @@ while(True):
         service_print("Processing tweet " +str(tweetID)+" by "+username)
         if( inReply):
             service_print("Tweet is a reply")
-            inReplyTweet = api.get_status(inReply)
+            inReplyTweet = None
+            try:
+                inReplyTweet = api.get_status(inReply)
+            except tweepy.error.TweepError as e:
+                service_print("Tweet deleted")
+                continue    
             topName = inReplyTweet.user.screen_name
             stweet = json.dumps(inReplyTweet._json, indent = 4)
             jtweet = json.loads(json.dumps(inReplyTweet._json))
@@ -84,7 +89,11 @@ while(True):
                 subprocess.call(["sleep","10"])
                 #The api needs to upload the video before the status can be posted
                 try:
+                    service_print("Uploading status")
                     api.update_status(status="@"+username+" @"+topName+" Are u ready for some football?",in_reply_to_status_id=tweetID, media_ids=[upload_result.media_id_string])
+                #except tweepy.error.TweepError as e:
+                #    if e.api_code==144:
+                #        api.update_status(status="@"+username+" Couldn't upload your video, sorry.",in_reply_to_status_id=tweetID)
                 except:
                     api.update_status(status="@"+username+" Couldn't upload your video, sorry.",in_reply_to_status_id=tweetID)
                 subprocess.call(["nflclean.sh"])
